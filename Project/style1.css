@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: "Prompt", sans-serif;
+    background: url("background.jpg") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 400px;
+    z-index: 1;
+    position: relative;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    
+}
+
+.name-row {
+    display: flex;
+    gap: 10px; /* ช่องว่างระหว่าง Firstname กับ Lastname */
+    margin-bottom: 15px; /* ช่องว่างด้านล่างของแถวนี้ */
+    text-align: left; /* จัด label กับ input ให้อยู่ชิดซ้าย */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.name-row input {
+    margin-bottom: 0; /* กัน input ในแถวนี้มีช่องว่างซ้ำ */
+    width: 100%;
+    box-sizing: border-box; /* รวม padding และ border ใน width */
+}
+
+.name-row .form-group {
+    flex: 1;   /* ให้ Firstname และ Lastname กว้างเท่ากัน */
+    min-width: 0; /* ป้องกัน flex item ดันกันจนล้น */
+}
+
+.text1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28b2eb;
+}
+
+.text2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffb04c;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #28b2eb;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #28b2eb;
+    box-sizing: 12;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #28b2eb;
+    outline: none;
+    box-shadow: 0 0 6px rgba(40,178,235,0.5);
+}
+
+button {
+    width: 50%;
+    padding: 12px;
+    background: #28b2eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1a91c4;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
+    font-size: 14px;
+    color: #444;
+    text-align: left;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkbox-group label a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.checkbox-group label a:hover {
+    color: #1a5ed9;
+    text-decoration: underline;
+}
+
+
+.register-link {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #444;
+}
+
+.register-link a {
+    color: #28b2eb;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+    color: #1a91c4;
+}
+
+.footer {
+    background: #cfcfcf;
+    color: rgb(32, 32, 32);
+    padding: 15px 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+    z-index: 2;
+}
+
+.footer a {
+    color: #2d2d2d;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: #ffb04c;
+}
+
+.footer .footer-links {
+    margin-top: 10px;
+}
+
+

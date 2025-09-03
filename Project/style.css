@@ -157,21 +157,21 @@ body {
 }
 
 .footer {
-  background: #cfcfcf;      /* สีเข้ม */
+  background: #cfcfcf;     
   color: rgb(32, 32, 32);
   padding: 30px 20px;
   text-align: center;
 }
 
 .footer a {
-  color: #2d2d2d;           /* สีลิงก์ให้เข้ากับธีม */
+  color: #2d2d2d;          
   text-decoration: none;
   margin: 0 10px;
   transition: 0.3s;
 }
 
 .footer a:hover {
-  color: #ffb04c;           /* hover effect */
+  color: #ffb04c;         
 }
 
 .footer .footer-links {

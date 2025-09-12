@@ -10,14 +10,20 @@
     <div class="login-box">
         <span class="text1">HACKA</span><span class="text2">THON</span>
         <h2>เข้าสู่ระบบ</h2>
-        <form action="index.html" method="post">
+        
+        <!-- เพิ่ม success message element -->
+        <div id="successMessage" class="success-message">
+            กำลังเข้าสู่ระบบ... กรุณารอสักครู่
+        </div>
+        
+        <form id="loginForm">
             <label for="email">E-mail</label>
-            <input type="text" id="email" name="email" placeholder="E-mail" required>
-            
+            <input type="email" id="email" name="email" placeholder="E-mail" required>
+                         
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="password" required>
-            
-            <button type="submit" value="login">Submit</button>
+                         
+            <button type="submit">Submit</button>
             <p class="register-link">
             ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a>
             </p>
@@ -25,12 +31,37 @@
     </div>
 
     <footer class="footer">
-    <div class="footer-content">
-      <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
-      <div class="footer-links">
-        <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
-      </div>
-    </div>
-  </footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+            <div class="footer-links">
+                <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+            
+            // ดึงค่าจากฟอร์ม
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // ตรวจสอบข้อมูล
+            if (email && password) {
+                // ไปหน้า index.html เลย
+                window.location.href = 'index.html';
+            } else {
+                alert('กรุณากรอกข้อมูลให้ครอบถ้วน');
+            }
+        });
+
+        // เพิ่ม Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
 </body>
 </html>

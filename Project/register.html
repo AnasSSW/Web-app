@@ -10,7 +10,7 @@
     <div class="login-box">
         <span class="text1">HACKA</span><span class="text2">THON</span>
         <h2>Register</h2>
-        <form action="login.html" method="post">
+        <form id="registerForm">
             <div class="name-row">
                 <div class="form-group">
                     <label for="firstname">First name</label>
@@ -21,24 +21,24 @@
                     <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
                 </div>
             </div>
-            
+                         
             <label for="tel">Telephone</label>
             <input type="tel" id="tel" name="tel" placeholder="Telephone" required>
-            
+                         
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="E-mail" required>
-            
+                         
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Password" required>
-            
+                         
             <label for="confirm-password">Confirm Password</label>
             <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm-password" required>
-            
+                         
             <div class="checkbox-group">
                 <input type="checkbox" id="terms" name="terms" required>
                 <label for="terms">ฉันยอมรับ <a href="#">เงื่อนไขการใช้งาน</a></label>
             </div>
-
+ 
             <button type="submit">Submit</button>
         </form>
         <p class="register-link">
@@ -47,12 +47,56 @@
     </div>
 
     <footer class="footer">
-    <div class="footer-content">
-      <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
-      <div class="footer-links">
-        <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
-      </div>
-    </div>
+        <div class="footer-content">
+            <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+            <div class="footer-links">
+                <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
     </footer>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+            
+            // ดึงค่าจากฟอร์ม
+            const firstname = document.getElementById('firstname').value;
+            const lastname = document.getElementById('lastname').value;
+            const tel = document.getElementById('tel').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // ตรวจสอบข้อมูล
+            if (!firstname || !lastname || !tel || !email || !password || !confirmPassword) {
+                alert('กรุณากรอกข้อมูลให้ครอบถ้วน');
+                return;
+            }
+            
+            // ตรวจสอบ password ตรงกันไหม
+            if (password !== confirmPassword) {
+                alert('Password ไม่ตรงกัน กรุณากรอกใหม่');
+                return;
+            }
+            
+            // ตรวจสอบ checkbox เงื่อนไข
+            if (!terms) {
+                alert('กรุณายอมรับเงื่อนไขการใช้งาน');
+                return;
+            }
+            
+            // ถ้าทุกอย่างถูกต้อง ไปหน้า login.html
+            alert('สมัครสมาชิกสำเร็จ!');
+            window.location.href = 'login.html';
+        });
+
+        // เพิ่ม Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('registerForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
 </body>
 </html>

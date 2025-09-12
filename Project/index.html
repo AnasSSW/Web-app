@@ -20,20 +20,20 @@
           <input type="text" placeholder="ค้นหา...">
         </div>
 
-        <div class="actions">
-          <a href="login.html"><button>Login</button></a>
-          <a href="register.html"><button>Register</button></a>
+        <!-- ส่วนที่จะเปลี่ยนตามสถานะ login -->
+        <div class="actions" id="headerActions">
+          <!-- จะถูกเปลี่ยนด้วย JavaScript -->
         </div>
     </div>
     <!-- header -->
   </div>
-  
+
   <!-- ส่วนล่าง (พื้นหลังขาว) -->
   <div class="main-section">
     <div class="container">
       <div class="card">
         <img src="https://southeastasia.hss.de/fileadmin/user_upload/Projects_HSS/South_East_Asia/pictures/events/2021/Thailand/211204-01-Event-Virtual-Hackathon.jpg" alt="product1">
-        <h3>งานที่ 1 </h3>
+        <h3>งานที่ 1</h3>
         <button>Join team</button>
       </div>
       <div class="card">
@@ -54,7 +54,6 @@
     </div>
   </div>
 
-
   <footer class="footer">
     <div class="footer-content">
       <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
@@ -63,5 +62,194 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // ตรวจสอบสถานะ login จาก URL parameter หรือ sessionStorage
+    function checkLoginStatus() {
+      // วิธีที่ 1: ตรวจสอบจาก URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLoggedIn = urlParams.get('logged') === 'true';
+      
+      // วิธีที่ 2: ตรวจสอบจาก sessionStorage (ถ้าเราเก็บข้อมูล login ไว้)
+      const userLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      
+      return isLoggedIn || userLoggedIn;
+    }
+
+    // ฟังก์ชันสำหรับ logout
+    function logout() {
+      if (confirm('ต้องการออกจากระบบหรือไม่?')) {
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('userEmail');
+        // รีเฟรชหน้าเพื่อแสดงปุ่ม login อีกครั้ง
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ฟังก์ชันสำหรับไปหน้าโปรไฟล์
+    function goToProfile() {
+      alert('ไปหน้าโปรไฟล์ (ยังไม่ได้สร้าง)');
+      // window.location.href = 'profile.html';
+    }
+
+    // ฟังก์ชันแสดง notifications (ตัวอย่าง)
+    function showNotifications() {
+      alert('คุณมีการแจ้งเตือน 3 รายการ\n• ทีมใหม่เข้าร่วม Hackathon\n• มีข้อความใหม่\n• อีเวนต์ใหม่เปิดรับสมัคร');
+    }
+
+    // อัพเดต header ตามสถานะ login
+    function updateHeader() {
+      const actionsDiv = document.getElementById('headerActions');
+      const isLoggedIn = checkLoginStatus();
+
+      if (isLoggedIn) {
+        // ถ้า login แล้ว แสดง profile และ logout
+        const userEmail = sessionStorage.getItem('userEmail') || 'user@example.com';
+        actionsDiv.innerHTML = `
+          <div class="user-menu">
+            <button class="notification-btn" onclick="showNotifications()">
+              <span class="notification-icon">🔔</span>
+              <span class="notification-count">3</span>
+            </button>
+            <div class="user-info">
+              <img src="https://via.placeholder.com/35/28b2eb/ffffff?text=U" alt="user" class="user-avatar">
+              <span class="user-email">${userEmail}</span>
+            </div>
+            <div class="user-actions">
+              <button onclick="goToProfile()">โปรไฟล์</button>
+              <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+          </div>
+        `;
+      } else {
+        // ถ้ายังไม่ login แสดงปุ่ม login/register
+        actionsDiv.innerHTML = `
+          <a href="login.html"><button>Login</button></a>
+          <a href="register.html"><button>Register</button></a>
+        `;
+      }
+    }
+
+    // เรียกใช้เมื่อหน้าโหลด
+    document.addEventListener('DOMContentLoaded', function() {
+      updateHeader();
+      
+      // ถ้ามี parameter logged=true ใน URL ให้เก็บสถานะ login
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('logged') === 'true') {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        // ลบ parameter ออกจาก URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateHeader();
+      }
+    });
+  </script>
+
+  <style>
+    /* CSS สำหรับ user menu */
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-btn {
+      position: relative;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .notification-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .notification-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff4757;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 50%;
+      min-width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    .user-email {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .user-actions button {
+      padding: 8px 15px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .user-actions button:hover {
+      background: white;
+      color: #333;
+    }
+
+    .logout-btn {
+      background: #ff4757 !important;
+      border-color: #ff4757 !important;
+    }
+
+    .logout-btn:hover {
+      background: #ff3742 !important;
+      color: white !important;
+    }
+
+    @media (max-width: 768px) {
+      .user-menu {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .user-email {
+        display: none;
+      }
+      
+      .user-actions {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
 </body>
 </html>

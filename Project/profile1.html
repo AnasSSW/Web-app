@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Header</title>
+  <link rel="stylesheet" href="style_profile.css">
+</head>
+<body>
+  <!-- ส่วนบน (Background Image) -->
+  <div class="hero">
+    <!-- header -->
+    <div class="header">
+        <div class="logo">
+          <img src="logo.png" alt="logo">
+          <span class="text1">HACKA</span><span class="text2">THON</span>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" placeholder="ค้นหา...">
+        </div>
+
+        <!-- ส่วนที่จะเปลี่ยนตามสถานะ login -->
+        <div class="actions" id="headerActions">
+          <!-- จะถูกเปลี่ยนด้วย JavaScript -->
+        </div>
+    </div>
+    <!-- header -->
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>การแจ้งเตือน</h2>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="notificationList" class="notification-list">
+          <div class="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ส่วนล่าง (พื้นหลังขาว) -->
+  <div class="main-section">
+    <div class="profile-header">
+            <div class="profile-image">
+                    <img src="https://via.placeholder.com/150x150/4f46e5/ffffff?text=SC" alt="Profile Picture" id="profile-img">
+                    <div class="image-upload-overlay" onclick="document.getElementById('imageUpload').click()">
+                        <i class="fas fa-camera"></i>
+                        <span>เปลี่ยนรูป</span>
+                    </div>
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                </div>
+                <div class="profile-info">
+                    <h3 class="name">ลุงตู่ ใจดี</h3>
+                </div>
+            </div>
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-address-book"></i>
+                    ข้อมูลติดต่อ
+                </h3>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <span class="label">อีเมล</span>
+                            <span class="value">somchai.jaidee@email.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <span class="label">โทรศัพท์</span>
+                            <span class="value">+66 89 123 4567</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <span class="label">ที่อยู่</span>
+                            <span class="value">กรุงเทพมหานคร, ประเทศไทย</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <span class="label">GitHub</span>
+                            <span class="value">github.com/somchai-dev</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-code"></i>
+                    ทักษะและความสามารถ
+                </h3>
+                
+                <div class="skills-category">
+                    <h4>Frontend Development</h4>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <span class="skill-name">HTML/CSS</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h4>Backend Development</h4>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <span class="skill-name">PHP</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MySQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+      <div class="footer-links">
+        <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ตรวจสอบสถานะ login
+    function checkLoginStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLoggedIn = urlParams.get('logged') === 'true';
+      const userLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      return isLoggedIn || userLoggedIn;
+    }
+
+    function logout() {
+      if (confirm('ต้องการออกจากระบบหรือไม่?')) {
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('userEmail');
+        window.location.href = 'index.html';
+      }
+    }
+
+    function goToProfile() {
+      alert('ไปหน้าโปรไฟล์ (ยังไม่ได้สร้าง)');
+    }
+
+    function loadNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      notificationList.innerHTML = '<div class="loading">กำลังโหลด...</div>';
+      setTimeout(() => {
+        const mockNotifications = [
+          {id:1,type:'team',title:'ทีมใหม่เข้าร่วม Hackathon',message:'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',time:'2 นาทีที่แล้ว',isRead:false,icon:'👥'},
+          {id:2,type:'message',title:'ข้อความใหม่',message:'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',time:'15 นาทีที่แล้ว',isRead:false,icon:'💬'},
+          {id:3,type:'event',title:'อีเวนต์ใหม่เปิดรับสมัคร',message:'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',time:'1 ชั่วโมงที่แล้ว',isRead:true,icon:'🎯'},
+          {id:4,type:'achievement',title:'คุณได้รับรางวัล!',message:'ยินดีด้วย! คุณได้รับ Badge "Team Player"',time:'3 ชั่วโมงที่แล้ว',isRead:true,icon:'🏆'}
+        ];
+        let notificationsHTML = '';
+        mockNotifications.forEach(notification => {
+          notificationsHTML += `
+            <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
+                 onclick="markAsRead(${notification.id})">
+              <div class="notification-icon">${notification.icon}</div>
+              <div class="notification-content">
+                <div class="notification-title">${notification.title}</div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-time">${notification.time}</div>
+              </div>
+              ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+            </div>
+          `;
+        });
+        notificationList.innerHTML = notificationsHTML;
+        const unreadCount = mockNotifications.filter(n => !n.isRead).length;
+        updateNotificationCount(unreadCount);
+      }, 800);
+    }
+
+    function showNotifications() {
+      const modal = document.getElementById('notificationModal');
+      modal.style.display = 'block';
+      loadNotifications();
+      modal.onclick = function(event) {
+        if (event.target === modal) {
+          closeNotificationModal();
+        }
+      }
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeNotificationModal();
+        }
+      });
+    }
+
+    function closeNotificationModal() {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+
+    function markAsRead(notificationId) {
+      console.log(`Marked notification ${notificationId} as read`);
+      const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+      if (notificationElement) {
+        notificationElement.classList.remove('unread');
+        const badge = notificationElement.querySelector('.notification-badge');
+        if (badge) badge.remove();
+      }
+      const currentCount = parseInt(document.querySelector('.notification-count').textContent) || 0;
+      if (currentCount > 0) {
+        updateNotificationCount(currentCount - 1);
+      }
+    }
+
+    function updateNotificationCount(count) {
+      const countElement = document.querySelector('.notification-count');
+      if (countElement) {
+        if (count > 0) {
+          countElement.textContent = count > 99 ? '99+' : count;
+          countElement.style.display = 'flex';
+        } else {
+          countElement.style.display = 'none';
+        }
+      }
+    }
+
+    function updateHeader() {
+      const actionsDiv = document.getElementById('headerActions');
+      const isLoggedIn = checkLoginStatus();
+      if (isLoggedIn) {
+        actionsDiv.innerHTML = `
+          <div class="user-menu">
+            <button class="notification-btn" onclick="showNotifications()">
+              <span class="notification-icon">🔔</span>
+              <span class="notification-count">3</span>
+            </button>
+            <div class="hamburger" onclick="toggleMenu()">
+              <div></div><div></div><div></div>
+            </div>
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button onclick="goToProfile()">โปรไฟล์</button>
+              <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+          </div>
+        `;
+      } else {
+        actionsDiv.innerHTML = `
+          <a href="login.html"><button>Login</button></a>
+          <a href="register.html"><button>Register</button></a>
+        `;
+      }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateHeader();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('logged') === 'true') {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateHeader();
+      }
+    });
+
+    // ปิดเมนูถ้าคลิกนอก
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const hamburger = document.querySelector('.hamburger');
+      if (menu && hamburger && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('show');
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageUpload = document.getElementById('imageUpload');
+        const profileImg = document.getElementById('profile-img');
+
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if file is an image
+                if (!file.type.startsWith('image/')) {
+                    alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                    return;
+                }
+
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImg.src = e.target.result;
+                    
+                    // Add a smooth transition effect
+                    profileImg.style.opacity = '0';
+                    setTimeout(() => {
+                        profileImg.style.transition = 'opacity 0.3s ease';
+                        profileImg.style.opacity = '1';
+                    }, 100);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add click effect to contact items
+        const contactItems = document.querySelectorAll('.contact-item');
+        contactItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-3px)';
+                }, 150);
+            });
+        });
+
+        // Add drag and drop functionality
+        const profileImage = document.querySelector('.profile-image');
+        
+        profileImage.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1.05)';
+            this.style.filter = 'brightness(0.8)';
+        });
+
+        profileImage.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1)';
+            this.style.filter = 'brightness(1)';
+        });
+
+        profileImage.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1)';
+            this.style.filter = 'brightness(1)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    if (file.size <= 5 * 1024 * 1024) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            profileImg.src = e.target.result;
+                            profileImg.style.opacity = '0';
+                            setTimeout(() => {
+                                profileImg.style.transition = 'opacity 0.3s ease';
+                                profileImg.style.opacity = '1';
+                            }, 100);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
+                    }
+                } else {
+                    alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                }
+            }
+        });
+    });
+  </script>
+</body>
+</html>

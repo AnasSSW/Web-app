@@ -28,6 +28,21 @@
     <!-- header -->
   </div>
 
+  <!-- Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>การแจ้งเตือน</h2>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="notificationList" class="notification-list">
+          <div class="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ส่วนล่าง (พื้นหลังขาว) -->
   <div class="main-section">
     <div class="container">
@@ -38,17 +53,17 @@
       </div>
       <div class="card">
         <img src="https://www.spu.ac.th/fac/informatics/wp-content/uploads/sites/10/2023/12/SPU-AI-Prompt-Mini-Hackathon-07-1-scaled.jpg" alt="product2">
-        <h3>Product 2</h3>
+        <h3>งานที่ 2</h3>
         <button>Join team</button>
       </div>
       <div class="card">
         <img src="https://th.bing.com/th/id/R.ae5a6a64b605c1231975af957fc31f70?rik=b%2bucy0JKkjmT1A&riu=http%3a%2f%2fstatic1.squarespace.com%2fstatic%2f5cd8cf71b2cf79a5a237fb49%2f5d145deceba7710001cdc1b4%2f624e8fc0a3318b6caef6a1cd%2f1649315883420%2fThematic%2bInnovation%2b2565.jpeg%3fformat%3d1500w&ehk=DqtAKTnQdJI4%2fxGKFXVyQ3q6Zdy6U6JkfuDLbdHdZ5c%3d&risl=&pid=ImgRaw&r=0" alt="product3">
-        <h3>Product 3</h3>
+        <h3>งานที่ 3</h3>
         <button>Join team</button>
       </div>
       <div class="card">
         <img src="https://carlifeway.com/wp-content/uploads/2023/05/Welcome-Home-New-Innovation-San-Parang-PTT-Group-Young-Socialpreneur-Hackathon-3.jpg" alt="product4">
-        <h3>Product 4</h3>
+        <h3>งานที่ 4</h3>
         <button>Join team</button>
       </div>
     </div>
@@ -66,13 +81,9 @@
   <script>
     // ตรวจสอบสถานะ login จาก URL parameter หรือ sessionStorage
     function checkLoginStatus() {
-      // วิธีที่ 1: ตรวจสอบจาก URL parameter
       const urlParams = new URLSearchParams(window.location.search);
       const isLoggedIn = urlParams.get('logged') === 'true';
-      
-      // วิธีที่ 2: ตรวจสอบจาก sessionStorage (ถ้าเราเก็บข้อมูล login ไว้)
       const userLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-      
       return isLoggedIn || userLoggedIn;
     }
 
@@ -81,7 +92,6 @@
       if (confirm('ต้องการออกจากระบบหรือไม่?')) {
         sessionStorage.removeItem('isLoggedIn');
         sessionStorage.removeItem('userEmail');
-        // รีเฟรชหน้าเพื่อแสดงปุ่ม login อีกครั้ง
         window.location.href = 'index.html';
       }
     }
@@ -89,12 +99,154 @@
     // ฟังก์ชันสำหรับไปหน้าโปรไฟล์
     function goToProfile() {
       alert('ไปหน้าโปรไฟล์ (ยังไม่ได้สร้าง)');
-      // window.location.href = 'profile.html';
     }
 
-    // ฟังก์ชันแสดง notifications (ตัวอย่าง)
+    // ฟังก์ชันโหลดการแจ้งเตือนด้วย Ajax
+    function loadNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      
+      // แสดง loading
+      notificationList.innerHTML = '<div class="loading">กำลังโหลด...</div>';
+      
+      // จำลองการเรียก API (ในการใช้งานจริงจะเป็น URL ของ API)
+      // fetch('/api/notifications')
+      
+      // ใช้ setTimeout เพื่อจำลองการโหลดข้อมูล
+      setTimeout(() => {
+        // จำลองข้อมูลการแจ้งเตือนจาก server
+        const mockNotifications = [
+          {
+            id: 1,
+            type: 'team',
+            title: 'ทีมใหม่เข้าร่วม Hackathon',
+            message: 'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',
+            time: '2 นาทีที่แล้ว',
+            isRead: false,
+            icon: '👥'
+          },
+          {
+            id: 2,
+            type: 'message',
+            title: 'ข้อความใหม่',
+            message: 'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',
+            time: '15 นาทีที่แล้ว',
+            isRead: false,
+            icon: '💬'
+          },
+          {
+            id: 3,
+            type: 'event',
+            title: 'อีเวนต์ใหม่เปิดรับสมัคร',
+            message: 'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',
+            time: '1 ชั่วโมงที่แล้ว',
+            isRead: true,
+            icon: '🎯'
+          },
+          {
+            id: 4,
+            type: 'achievement',
+            title: 'คุณได้รับรางวัล!',
+            message: 'ยินดีด้วย! คุณได้รับ Badge "Team Player"',
+            time: '3 ชั่วโมงที่แล้ว',
+            isRead: true,
+            icon: '🏆'
+          }
+        ];
+
+        // สร้าง HTML สำหรับการแจ้งเตือน
+        let notificationsHTML = '';
+        if (mockNotifications.length === 0) {
+          notificationsHTML = '<div class="no-notifications">ไม่มีการแจ้งเตือน</div>';
+        } else {
+          mockNotifications.forEach(notification => {
+            notificationsHTML += `
+              <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
+                   onclick="markAsRead(${notification.id})">
+                <div class="notification-icon">${notification.icon}</div>
+                <div class="notification-content">
+                  <div class="notification-title">${notification.title}</div>
+                  <div class="notification-message">${notification.message}</div>
+                  <div class="notification-time">${notification.time}</div>
+                </div>
+                ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+              </div>
+            `;
+          });
+        }
+
+        // อัพเดต HTML
+        notificationList.innerHTML = notificationsHTML;
+        
+        // อัพเดตจำนวนการแจ้งเตือนที่ยังไม่ได้อ่าน
+        const unreadCount = mockNotifications.filter(n => !n.isRead).length;
+        updateNotificationCount(unreadCount);
+        
+      }, 800); // จำลองเวลาโหลด
+    }
+
+    // ฟังก์ชันแสดง modal การแจ้งเตือน
     function showNotifications() {
-      alert('คุณมีการแจ้งเตือน 3 รายการ\n• ทีมใหม่เข้าร่วม Hackathon\n• มีข้อความใหม่\n• อีเวนต์ใหม่เปิดรับสมัคร');
+      const modal = document.getElementById('notificationModal');
+      modal.style.display = 'block';
+      loadNotifications();
+      
+      // เพิ่ม event listener สำหรับปิด modal เมื่อคลิกพื้นที่ backdrop
+      modal.onclick = function(event) {
+        // ปิดเมื่อคลิกพื้นหลังมืด (backdrop) เท่านั้น ไม่ใช่เนื้อหา modal
+        if (event.target === modal) {
+          closeNotificationModal();
+        }
+      }
+      
+      // เพิ่ม event listener สำหรับปิด modal ด้วย ESC key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeNotificationModal();
+        }
+      });
+    }
+
+    // ฟังก์ชันปิด modal
+    function closeNotificationModal() {
+      const modal = document.getElementById('notificationModal');
+      modal.style.display = 'none';
+    }
+
+    // ฟังก์ชันทำเครื่องหมายว่าอ่านแล้ว
+    function markAsRead(notificationId) {
+      // ในการใช้งานจริงจะส่ง request ไป server
+      // fetch(`/api/notifications/${notificationId}/read`, { method: 'POST' })
+      
+      console.log(`Marked notification ${notificationId} as read`);
+      
+      // อัพเดต UI
+      const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+      if (notificationElement) {
+        notificationElement.classList.remove('unread');
+        const badge = notificationElement.querySelector('.notification-badge');
+        if (badge) {
+          badge.remove();
+        }
+      }
+      
+      // อัพเดตจำนวนการแจ้งเตือน
+      const currentCount = parseInt(document.querySelector('.notification-count').textContent) || 0;
+      if (currentCount > 0) {
+        updateNotificationCount(currentCount - 1);
+      }
+    }
+
+    // ฟังก์ชันอัพเดตจำนวนการแจ้งเตือน
+    function updateNotificationCount(count) {
+      const countElement = document.querySelector('.notification-count');
+      if (countElement) {
+        if (count > 0) {
+          countElement.textContent = count > 99 ? '99+' : count;
+          countElement.style.display = 'flex';
+        } else {
+          countElement.style.display = 'none';
+        }
+      }
     }
 
     // อัพเดต header ตามสถานะ login
@@ -103,7 +255,6 @@
       const isLoggedIn = checkLoginStatus();
 
       if (isLoggedIn) {
-        // ถ้า login แล้ว แสดง profile และ logout
         const userEmail = sessionStorage.getItem('userEmail') || 'user@example.com';
         actionsDiv.innerHTML = `
           <div class="user-menu">
@@ -111,10 +262,6 @@
               <span class="notification-icon">🔔</span>
               <span class="notification-count">3</span>
             </button>
-            <div class="user-info">
-              <img src="https://via.placeholder.com/35/28b2eb/ffffff?text=U" alt="user" class="user-avatar">
-              <span class="user-email">${userEmail}</span>
-            </div>
             <div class="user-actions">
               <button onclick="goToProfile()">โปรไฟล์</button>
               <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
@@ -122,7 +269,6 @@
           </div>
         `;
       } else {
-        // ถ้ายังไม่ login แสดงปุ่ม login/register
         actionsDiv.innerHTML = `
           <a href="login.html"><button>Login</button></a>
           <a href="register.html"><button>Register</button></a>
@@ -134,122 +280,21 @@
     document.addEventListener('DOMContentLoaded', function() {
       updateHeader();
       
-      // ถ้ามี parameter logged=true ใน URL ให้เก็บสถานะ login
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('logged') === 'true') {
         sessionStorage.setItem('isLoggedIn', 'true');
-        // ลบ parameter ออกจาก URL
         window.history.replaceState({}, document.title, window.location.pathname);
         updateHeader();
       }
+      
+      // ตรวจสอบการแจ้งเตือนใหม่ทุกๆ 30 วินาที (ถ้า login แล้ว)
+      if (checkLoginStatus()) {
+        setInterval(() => {
+          // ในการใช้งานจริงจะเรียก API เพื่อตรวจสอบการแจ้งเตือนใหม่
+          console.log('Checking for new notifications...');
+        }, 30000);
+      }
     });
   </script>
-
-  <style>
-    /* CSS สำหรับ user menu */
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .notification-btn {
-      position: relative;
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      transition: background-color 0.3s;
-    }
-
-    .notification-btn:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .notification-count {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #ff4757;
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 50%;
-      min-width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .user-avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-    }
-
-    .user-email {
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .user-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .user-actions button {
-      padding: 8px 15px;
-      border: 1px solid #fff;
-      background: transparent;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-    }
-
-    .user-actions button:hover {
-      background: white;
-      color: #333;
-    }
-
-    .logout-btn {
-      background: #ff4757 !important;
-      border-color: #ff4757 !important;
-    }
-
-    .logout-btn:hover {
-      background: #ff3742 !important;
-      color: white !important;
-    }
-
-    @media (max-width: 768px) {
-      .user-menu {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .user-email {
-        display: none;
-      }
-      
-      .user-actions {
-        flex-direction: column;
-        gap: 5px;
-      }
-    }
-  </style>
 </body>
 </html>

@@ -79,7 +79,7 @@
   </footer>
 
   <script>
-    // ตรวจสอบสถานะ login จาก URL parameter หรือ sessionStorage
+    // ตรวจสอบสถานะ login
     function checkLoginStatus() {
       const urlParams = new URLSearchParams(window.location.search);
       const isLoggedIn = urlParams.get('logged') === 'true';
@@ -87,7 +87,6 @@
       return isLoggedIn || userLoggedIn;
     }
 
-    // ฟังก์ชันสำหรับ logout
     function logout() {
       if (confirm('ต้องการออกจากระบบหรือไม่?')) {
         sessionStorage.removeItem('isLoggedIn');
@@ -96,109 +95,50 @@
       }
     }
 
-    // ฟังก์ชันสำหรับไปหน้าโปรไฟล์
     function goToProfile() {
       alert('ไปหน้าโปรไฟล์ (ยังไม่ได้สร้าง)');
     }
 
-    // ฟังก์ชันโหลดการแจ้งเตือนด้วย Ajax
     function loadNotifications() {
       const notificationList = document.getElementById('notificationList');
-      
-      // แสดง loading
       notificationList.innerHTML = '<div class="loading">กำลังโหลด...</div>';
-      
-      // จำลองการเรียก API (ในการใช้งานจริงจะเป็น URL ของ API)
-      // fetch('/api/notifications')
-      
-      // ใช้ setTimeout เพื่อจำลองการโหลดข้อมูล
       setTimeout(() => {
-        // จำลองข้อมูลการแจ้งเตือนจาก server
         const mockNotifications = [
-          {
-            id: 1,
-            type: 'team',
-            title: 'ทีมใหม่เข้าร่วม Hackathon',
-            message: 'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',
-            time: '2 นาทีที่แล้ว',
-            isRead: false,
-            icon: '👥'
-          },
-          {
-            id: 2,
-            type: 'message',
-            title: 'ข้อความใหม่',
-            message: 'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',
-            time: '15 นาทีที่แล้ว',
-            isRead: false,
-            icon: '💬'
-          },
-          {
-            id: 3,
-            type: 'event',
-            title: 'อีเวนต์ใหม่เปิดรับสมัคร',
-            message: 'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',
-            time: '1 ชั่วโมงที่แล้ว',
-            isRead: true,
-            icon: '🎯'
-          },
-          {
-            id: 4,
-            type: 'achievement',
-            title: 'คุณได้รับรางวัล!',
-            message: 'ยินดีด้วย! คุณได้รับ Badge "Team Player"',
-            time: '3 ชั่วโมงที่แล้ว',
-            isRead: true,
-            icon: '🏆'
-          }
+          {id:1,type:'team',title:'ทีมใหม่เข้าร่วม Hackathon',message:'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',time:'2 นาทีที่แล้ว',isRead:false,icon:'👥'},
+          {id:2,type:'message',title:'ข้อความใหม่',message:'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',time:'15 นาทีที่แล้ว',isRead:false,icon:'💬'},
+          {id:3,type:'event',title:'อีเวนต์ใหม่เปิดรับสมัคร',message:'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',time:'1 ชั่วโมงที่แล้ว',isRead:true,icon:'🎯'},
+          {id:4,type:'achievement',title:'คุณได้รับรางวัล!',message:'ยินดีด้วย! คุณได้รับ Badge "Team Player"',time:'3 ชั่วโมงที่แล้ว',isRead:true,icon:'🏆'}
         ];
-
-        // สร้าง HTML สำหรับการแจ้งเตือน
         let notificationsHTML = '';
-        if (mockNotifications.length === 0) {
-          notificationsHTML = '<div class="no-notifications">ไม่มีการแจ้งเตือน</div>';
-        } else {
-          mockNotifications.forEach(notification => {
-            notificationsHTML += `
-              <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
-                   onclick="markAsRead(${notification.id})">
-                <div class="notification-icon">${notification.icon}</div>
-                <div class="notification-content">
-                  <div class="notification-title">${notification.title}</div>
-                  <div class="notification-message">${notification.message}</div>
-                  <div class="notification-time">${notification.time}</div>
-                </div>
-                ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+        mockNotifications.forEach(notification => {
+          notificationsHTML += `
+            <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
+                 onclick="markAsRead(${notification.id})">
+              <div class="notification-icon">${notification.icon}</div>
+              <div class="notification-content">
+                <div class="notification-title">${notification.title}</div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-time">${notification.time}</div>
               </div>
-            `;
-          });
-        }
-
-        // อัพเดต HTML
+              ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+            </div>
+          `;
+        });
         notificationList.innerHTML = notificationsHTML;
-        
-        // อัพเดตจำนวนการแจ้งเตือนที่ยังไม่ได้อ่าน
         const unreadCount = mockNotifications.filter(n => !n.isRead).length;
         updateNotificationCount(unreadCount);
-        
-      }, 800); // จำลองเวลาโหลด
+      }, 800);
     }
 
-    // ฟังก์ชันแสดง modal การแจ้งเตือน
     function showNotifications() {
       const modal = document.getElementById('notificationModal');
       modal.style.display = 'block';
       loadNotifications();
-      
-      // เพิ่ม event listener สำหรับปิด modal เมื่อคลิกพื้นที่ backdrop
       modal.onclick = function(event) {
-        // ปิดเมื่อคลิกพื้นหลังมืด (backdrop) เท่านั้น ไม่ใช่เนื้อหา modal
         if (event.target === modal) {
           closeNotificationModal();
         }
       }
-      
-      // เพิ่ม event listener สำหรับปิด modal ด้วย ESC key
       document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
           closeNotificationModal();
@@ -206,37 +146,24 @@
       });
     }
 
-    // ฟังก์ชันปิด modal
     function closeNotificationModal() {
-      const modal = document.getElementById('notificationModal');
-      modal.style.display = 'none';
+      document.getElementById('notificationModal').style.display = 'none';
     }
 
-    // ฟังก์ชันทำเครื่องหมายว่าอ่านแล้ว
     function markAsRead(notificationId) {
-      // ในการใช้งานจริงจะส่ง request ไป server
-      // fetch(`/api/notifications/${notificationId}/read`, { method: 'POST' })
-      
       console.log(`Marked notification ${notificationId} as read`);
-      
-      // อัพเดต UI
       const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
       if (notificationElement) {
         notificationElement.classList.remove('unread');
         const badge = notificationElement.querySelector('.notification-badge');
-        if (badge) {
-          badge.remove();
-        }
+        if (badge) badge.remove();
       }
-      
-      // อัพเดตจำนวนการแจ้งเตือน
       const currentCount = parseInt(document.querySelector('.notification-count').textContent) || 0;
       if (currentCount > 0) {
         updateNotificationCount(currentCount - 1);
       }
     }
 
-    // ฟังก์ชันอัพเดตจำนวนการแจ้งเตือน
     function updateNotificationCount(count) {
       const countElement = document.querySelector('.notification-count');
       if (countElement) {
@@ -249,20 +176,20 @@
       }
     }
 
-    // อัพเดต header ตามสถานะ login
     function updateHeader() {
       const actionsDiv = document.getElementById('headerActions');
       const isLoggedIn = checkLoginStatus();
-
       if (isLoggedIn) {
-        const userEmail = sessionStorage.getItem('userEmail') || 'user@example.com';
         actionsDiv.innerHTML = `
           <div class="user-menu">
             <button class="notification-btn" onclick="showNotifications()">
               <span class="notification-icon">🔔</span>
               <span class="notification-count">3</span>
             </button>
-            <div class="user-actions">
+            <div class="hamburger" onclick="toggleMenu()">
+              <div></div><div></div><div></div>
+            </div>
+            <div id="dropdownMenu" class="dropdown-menu">
               <button onclick="goToProfile()">โปรไฟล์</button>
               <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
             </div>
@@ -276,23 +203,27 @@
       }
     }
 
-    // เรียกใช้เมื่อหน้าโหลด
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('show');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       updateHeader();
-      
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('logged') === 'true') {
         sessionStorage.setItem('isLoggedIn', 'true');
         window.history.replaceState({}, document.title, window.location.pathname);
         updateHeader();
       }
-      
-      // ตรวจสอบการแจ้งเตือนใหม่ทุกๆ 30 วินาที (ถ้า login แล้ว)
-      if (checkLoginStatus()) {
-        setInterval(() => {
-          // ในการใช้งานจริงจะเรียก API เพื่อตรวจสอบการแจ้งเตือนใหม่
-          console.log('Checking for new notifications...');
-        }, 30000);
+    });
+
+    // ปิดเมนูถ้าคลิกนอก
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const hamburger = document.querySelector('.hamburger');
+      if (menu && hamburger && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('show');
       }
     });
   </script>

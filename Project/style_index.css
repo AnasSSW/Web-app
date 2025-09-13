@@ -78,11 +78,11 @@ body {
 }
 
 .actions button:first-child {
-  background: #28b2eb;
+  background: #ffffff;
 }
 
 .actions button:last-child {
-  background: #ffb04c;
+  background: #007BFF;
 }
 
 .actions button:hover {
@@ -90,6 +90,182 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
+/* ----------- Enhanced Hamburger Menu ----------- */
+.hamburger {
+  width: 32px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-left: 12px;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.hamburger:hover {
+  transform: scale(1.05);
+  background: rgba(0, 123, 255, 0.08);
+}
+
+.hamburger:active {
+  transform: scale(0.95);
+}
+
+.hamburger div {
+  height: 3px;
+  background: linear-gradient(135deg, #333, #555);
+  border-radius: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger:hover div {
+  background: linear-gradient(135deg, #007BFF, #0056b3);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Animated hamburger transformation */
+.hamburger.active div:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active div:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hamburger.active div:nth-child(3) {
+  transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* Enhanced Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  right: 20px;
+  top: 75px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  display: none;
+  flex-direction: column;
+  min-width: 240px;
+  padding: 12px 8px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 28px;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+  border-radius: 2px 0 0 0;
+}
+
+.dropdown-menu button {
+  padding: 12px 20px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+  border-radius: 10px;
+  margin: 2px 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-menu button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: #007BFF;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+  z-index: -1;
+}
+
+.dropdown-menu button:hover {
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.08), rgba(0, 123, 255, 0.12));
+  color: #007BFF;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.dropdown-menu button:hover::before {
+  width: 4px;
+}
+
+.dropdown-menu button:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.dropdown-menu.show {
+  display: flex;
+}
+
+/* Enhanced Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    right: 10px;
+    min-width: 200px;
+    padding: 12px 6px;
+  }
+  
+  .dropdown-menu button {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-width: 100px;
+  }
+}
 /* ---------------- MAIN SECTION ---------------- */
 .main-section {
   background: white;
@@ -244,13 +420,13 @@ body {
 }
 
 .logout-btn {
-  background: #ff4757 !important;
-  border-color: #ff4757 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
 }
 
 .logout-btn:hover {
-  background: #ff3742 !important;
-  color: white !important;
+  background: #ffffff ;
+  color:  #007BFF;
 }
 
 /* ---------------- MODAL STYLES ---------------- */
@@ -340,7 +516,7 @@ body {
 
 .no-notifications {
   text-align: center;
-  padding: 40px;
+  padding: 20px;
   color: #666;
   font-size: 16px;
 }
@@ -373,7 +549,7 @@ body {
   font-size: 20px;
   margin-right: 15px;
   flex-shrink: 0;
-  width: 30px;
+  width: 15px;
   text-align: center;
 }
 

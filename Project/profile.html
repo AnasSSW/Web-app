@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โปรไฟล์ - Hackathon</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 200px;
+    position: relative;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ff9500;
+}
+
+.text1 {
+    color: #00bcd4;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.text2 {
+    color: #ff9500;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.search-bar {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    font-size: 16px;
+    background-color: #f8f9fa;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.notification-btn {
+    position: relative;
+    background: #ff9500;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.notification-btn::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    background: #ff4757;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    background: #ff9500;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Profile Section */
+.profile-section {
+    background: white;
+    margin: -50px auto 0;
+    max-width: 800px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.profile-header {
+    text-align: center;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: #666;
+    margin: 0 auto 20px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.camera-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background: #666;
+    border: 3px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.profile-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.profile-subtitle {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Profile Info */
+.profile-info {
+    padding: 40px;
+}
+
+.info-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #00bcd4;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #333;
+    font-size: 16px;
+}
+
+.info-value {
+    color: #666;
+    font-size: 16px;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #00bcd4, #0097a7);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    color: #333;
+    font-size: 20px;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.loading {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+/* Footer */
+.footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px;
+}
+
+.footer-content p {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #00bcd4;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        order: 3;
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+    
+    .profile-section {
+        margin: -30px 20px 0;
+    }
+    
+    .profile-header,
+    .profile-info {
+        padding: 30px 20px;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+</style>
+</head>
+<body>
+<!-- ส่วนบน (Background Image) -->
+  <div class="hero">
+    <!-- header -->
+    <div class="header">
+        <div class="logo">
+          <img src="logo.png" alt="logo">
+          <span class="text1">HACKA</span><span class="text2">THON</span>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" placeholder="ค้นหา...">
+        </div>
+
+        <!-- ส่วนที่จะเปลี่ยนตามสถานะ login -->
+        <div class="actions" id="headerActions">
+          <!-- จะถูกเปลี่ยนด้วย JavaScript -->
+        </div>
+    </div>
+    <!-- header -->
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>การแจ้งเตือน</h2>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="notificationList" class="notification-list">
+          <div class="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Profile Section -->
+<div class="profile-section">
+<div class="profile-header">
+<div class="profile-avatar">
+👤
+<div class="camera-overlay">📷</div>
+</div>
+<h1 class="profile-title">ข้อมูลส่วนตัว</h1>
+<p class="profile-subtitle">จัดการข้อมูลส่วนตัวของคุณ</p>
+</div>
+
+<div class="profile-info">
+<div class="info-section">
+<h2 class="section-title">ข้อมูลติดต่อ</h2>
+<div class="info-row">
+<span class="info-label">เบอร์โทรศัพท์ :</span>
+<span class="info-value">0618083124</span>
+</div>
+<div class="info-row">
+<span class="info-label">อีเมล :</span>
+<span class="info-value">athichanan2547@gmail.com</span>
+</div>
+</div>
+
+<div class="info-section">
+<h2 class="section-title">ข้อมูลเพิ่มเติม</h2>
+<div class="info-row">
+<span class="info-label">ชื่อผู้ใช้ :</span>
+<span class="info-value">athichanan2547</span>
+</div>
+<div class="info-row">
+<span class="info-label">สถานะ :</span>
+<span class="info-value">ออนไลน์</span>
+</div>
+<div class="info-row">
+<span class="info-label">วันที่เข้าร่วม :</span>
+<span class="info-value">13 กันยายน 2025</span>
+</div>
+</div>
+
+<button class="edit-btn">แก้ไขข้อมูล</button>
+</div>
+</div>
+
+<!-- Notification Modal -->
+<div id="notificationModal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>การแจ้งเตือน</h2>
+<span class="close" onclick="closeNotificationModal()">&times;</span>
+</div>
+<div class="modal-body">
+<div id="notificationList" class="notification-list">
+<div class="loading">ไม่มีการแจ้งเตือนใหม่</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+<div class="footer-content">
+<p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+<div class="footer-links">
+<p>ติดตามเรา <a href="#">เกี่ยวกับเรา</a> | <a href="#">ติดต่อ</a> | <a href="#">นโยบายความเป็นส่วนตัว</a></p>
+</div>
+</div>
+</footer>
+
+<script>
+// Notification Modal Functions
+function showNotificationModal() {
+    document.getElementById('notificationModal').style.display = 'block';
+}
+
+function closeNotificationModal() {
+    document.getElementById('notificationModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('notificationModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Edit profile function
+document.querySelector('.edit-btn').addEventListener('click', function() {
+    alert('ฟีเจอร์แก้ไขข้อมูลจะเปิดให้ใช้งานเร็วๆ นี้');
+});
+
+// Camera overlay click
+document.querySelector('.camera-overlay').addEventListener('click', function() {
+    alert('ฟีเจอร์เปลี่ยนรูปโปรไฟล์จะเปิดให้ใช้งานเร็วๆ นี้');
+});
+</script>
+</body>
+</html>

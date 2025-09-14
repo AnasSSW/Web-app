@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Page</title>
+  <link rel="stylesheet" href="style_detail.css">
+</head>
+<body>
+  <!-- ส่วนบน (Background Image) -->
+  <div class="hero">
+    <!-- header -->
+    <div class="header">
+        <div class="logo">
+          <img src="logo.png" alt="logo">
+          <span class="text1">HACKA</span><span class="text2">THON</span>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" placeholder="ค้นหา...">
+        </div>
+
+        <!-- ส่วนที่จะเปลี่ยนตามสถานะ login -->
+        <div class="actions" id="headerActions">
+          <!-- จะถูกเปลี่ยนด้วย JavaScript -->
+        </div>
+    </div>
+    <!-- header -->
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>การแจ้งเตือน</h2>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="notificationList" class="notification-list">
+          <div class="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ส่วนล่าง (พื้นหลังขาว) -->
+  <div class="main-section">
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <div class="banner-background">
+                <div class="banner-content">
+                    <div class="banner-text">
+                        <div class="hackathon-title">
+                            <span class="hackathon">HACKATHON</span>
+                            <span class="finding">FINDING THE BEST ENABLER</span>
+                        </div>
+                        <div class="thai-text">
+                            <p class="main-desc">บทสรุปการเดินทางครั้งสำคัญ</p>
+                            <p class="highlight">สู่สุดยอดนวัตกรรมระดับ</p>
+                            <p class="sme-text">SMEs ไทย</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Card -->
+        <div class="detail-card">
+            <div class="card-header">
+                <div class="profile-section">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h3>ชื่อ - นามสกุล</h3>
+                        <p>รายละเอียด</p>
+                    </div>
+                </div>
+                <div class="event-status">
+                    <span class="time-remaining">3 days remaining</span>
+                    <div class="action-buttons">
+                        <div class="more-menu-container">
+                            <button class="more-btn" onclick="toggleMoreMenu()">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div id="moreDropdownMenu" class="more-dropdown-menu">
+                                <button onclick="editPost()" class="edit-option">
+                                    <i class="fas fa-edit"></i>
+                                    แก้ไขโพสต์
+                                </button>
+                                <button onclick="deletePost()" class="delete-option">
+                                    <i class="fas fa-trash"></i>
+                                    ลบโพสต์
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="description-section">
+                    <h4>รายละเอียดงานแข่งขัน</h4>
+                    <ul class="event-details">
+                        <li>- อันตื่องการ สมมากแห่งงัน Hackathon จำนวน 3 คน</li>
+                        <li>- คุณสมบัติ ........</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button class="join-btn">เข้าร่วม</button>
+                <button class="contact-btn">ติดต่อ</button>
+            </div>
+        </div>
+    </main>
+  </div>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+      <div class="footer-links">
+        <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ตรวจสอบสถานะ login
+    function checkLoginStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLoggedIn = urlParams.get('logged') === 'true';
+      const userLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      return isLoggedIn || userLoggedIn;
+    }
+
+    function logout() {
+      if (confirm('ต้องการออกจากระบบหรือไม่?')) {
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('userEmail');
+        window.location.href = 'index.html';
+      }
+    }
+
+    function goToProfile() {
+      window.location.href = 'profile.html';
+    }
+
+    // ฟังก์ชันสำหรับปุ่ม more menu
+    function toggleMoreMenu() {
+      const menu = document.getElementById('moreDropdownMenu');
+      menu.classList.toggle('show');
+    }
+
+    function editPost() {
+      console.log('แก้ไขโพสต์');
+      // เพิ่มโค้ดสำหรับแก้ไขโพสต์ที่นี่
+      const menu = document.getElementById('moreDropdownMenu');
+      menu.classList.remove('show');
+    }
+
+    function deletePost() {
+      if (confirm('ต้องการลบโพสต์นี้หรือไม่?')) {
+        console.log('ลบโพสต์');
+        // เพิ่มโค้ดสำหรับลบโพสต์ที่นี่
+      }
+      const menu = document.getElementById('moreDropdownMenu');
+      menu.classList.remove('show');
+    }
+
+    function loadNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      notificationList.innerHTML = '<div class="loading">กำลังโหลด...</div>';
+      setTimeout(() => {
+        const mockNotifications = [
+          {id:1,type:'team',title:'ทีมใหม่เข้าร่วม Hackathon',message:'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',time:'2 นาทีที่แล้ว',isRead:false,icon:'👥'},
+          {id:2,type:'message',title:'ข้อความใหม่',message:'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',time:'15 นาทีที่แล้ว',isRead:false,icon:'💬'},
+          {id:3,type:'event',title:'อีเวนต์ใหม่เปิดรับสมัคร',message:'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',time:'1 ชั่วโมงที่แล้ว',isRead:true,icon:'🎯'},
+          {id:4,type:'achievement',title:'คุณได้รับรางวัล!',message:'ยินดีด้วย! คุณได้รับ Badge "Team Player"',time:'3 ชั่วโมงที่แล้ว',isRead:true,icon:'🏆'}
+        ];
+        let notificationsHTML = '';
+        mockNotifications.forEach(notification => {
+          notificationsHTML += `
+            <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
+                 onclick="markAsRead(${notification.id})">
+              <div class="notification-icon">${notification.icon}</div>
+              <div class="notification-content">
+                <div class="notification-title">${notification.title}</div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-time">${notification.time}</div>
+              </div>
+              ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+            </div>
+          `;
+        });
+        notificationList.innerHTML = notificationsHTML;
+        const unreadCount = mockNotifications.filter(n => !n.isRead).length;
+        updateNotificationCount(unreadCount);
+      }, 800);
+    }
+
+    function showNotifications() {
+      const modal = document.getElementById('notificationModal');
+      modal.style.display = 'block';
+      loadNotifications();
+      modal.onclick = function(event) {
+        if (event.target === modal) {
+          closeNotificationModal();
+        }
+      }
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeNotificationModal();
+        }
+      });
+    }
+
+    function closeNotificationModal() {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+
+    function markAsRead(notificationId) {
+      console.log(`Marked notification ${notificationId} as read`);
+      const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+      if (notificationElement) {
+        notificationElement.classList.remove('unread');
+        const badge = notificationElement.querySelector('.notification-badge');
+        if (badge) badge.remove();
+      }
+      const currentCount = parseInt(document.querySelector('.notification-count').textContent) || 0;
+      if (currentCount > 0) {
+        updateNotificationCount(currentCount - 1);
+      }
+    }
+
+    function updateNotificationCount(count) {
+      const countElement = document.querySelector('.notification-count');
+      if (countElement) {
+        if (count > 0) {
+          countElement.textContent = count > 99 ? '99+' : count;
+          countElement.style.display = 'flex';
+        } else {
+          countElement.style.display = 'none';
+        }
+      }
+    }
+
+    function updateHeader() {
+      const actionsDiv = document.getElementById('headerActions');
+      const isLoggedIn = checkLoginStatus();
+      if (isLoggedIn) {
+        actionsDiv.innerHTML = `
+          <div class="user-menu">
+            <button class="notification-btn" onclick="showNotifications()">
+              <span class="notification-icon">🔔</span>
+              <span class="notification-count">3</span>
+            </button>
+            <div class="hamburger" onclick="toggleMenu()">
+              <div></div><div></div><div></div>
+            </div>
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button onclick="goToProfile()">โปรไฟล์</button>
+              <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+          </div>
+        `;
+      } else {
+        actionsDiv.innerHTML = `
+          <a href="login.html"><button>Login</button></a>
+          <a href="register.html"><button>Register</button></a>
+        `;
+      }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('show');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateHeader();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('logged') === 'true') {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateHeader();
+      }
+    });
+
+    // ปิดเมนูถ้าคลิกนอก
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const hamburger = document.querySelector('.hamburger');
+      const moreMenu = document.getElementById('moreDropdownMenu');
+      const moreBtn = document.querySelector('.more-btn');
+      
+      // ปิด user menu
+      if (menu && hamburger && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('show');
+      }
+      
+      // ปิด more menu
+      if (moreMenu && moreBtn && !moreMenu.contains(event.target) && !moreBtn.contains(event.target)) {
+        moreMenu.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>

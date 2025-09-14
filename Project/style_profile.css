@@ -274,20 +274,20 @@ body {
 }
 
 .profile-header {
-    color: rgb(0, 0, 0);
-    padding: 40px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    position: relative;
-    overflow: hidden;
+  color: rgb(0, 0, 0);
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+  overflow: hidden;
 }
 
 .profile-image {
-    position: relative;
-    flex-shrink: 0;
-    z-index: 1;
-    cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .profile-image img {
@@ -309,8 +309,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 120px;
-    height: 120px;
+    width: 129px;
+    height: 129px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.6);
     display: flex;

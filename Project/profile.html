@@ -1,16 +1,51 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - สมชาย ใจดี</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <link rel="stylesheet" href="style_profile.css">
 </head>
 <body>
-    <div class="container">
-        <div class="profile-card">
+  <!-- ส่วนบน (Background Image) -->
+  <div class="hero">
+    <!-- header -->
+    <div class="header">
+        <div class="logo">
+          <img src="logo.png" alt="logo">
+          <span class="text1">HACKA</span><span class="text2">THON</span>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" placeholder="ค้นหา...">
+        </div>
+
+        <!-- ส่วนที่จะเปลี่ยนตามสถานะ login -->
+        <div class="actions" id="headerActions">
+          <!-- จะถูกเปลี่ยนด้วย JavaScript -->
+        </div>
+    </div>
+    <!-- header -->
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>การแจ้งเตือน</h2>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="notificationList" class="notification-list">
+          <div class="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ส่วนล่าง (พื้นหลังขาว) -->
+  <div class="main-section">
+    <div class="profile-card">
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-image">
@@ -25,7 +60,6 @@
                     <h1 class="name">ลุงตู่ ใจดี</h1>
                 </div>
             </div>
-
             <!-- Contact Information -->
             <div class="section">
                 <h3 class="section-title">
@@ -127,448 +161,298 @@
             </div>
         </div>
     </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Hackathon. | แบ่งปันความรู้และแรงบันดาลใจทุกวัน</p>
+      <div class="footer-links">
+        <p>ติดตามเรา <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+  <script>
+    // ตรวจสอบสถานะ login
+    function checkLoginStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLoggedIn = urlParams.get('logged') === 'true';
+      const userLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      return isLoggedIn || userLoggedIn;
+    }
+
+    function logout() {
+      if (confirm('ต้องการออกจากระบบหรือไม่?')) {
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('userEmail');
+        window.location.href = 'index.html';
+      }
+    }
+
+    function goToHome() {
+      window.location.href = 'index.html';
+    }
+
+    function loadNotifications() {
+      const notificationList = document.getElementById('notificationList');
+      notificationList.innerHTML = '<div class="loading">กำลังโหลด...</div>';
+      setTimeout(() => {
+        const mockNotifications = [
+          {id:1,type:'team',title:'ทีมใหม่เข้าร่วม Hackathon',message:'ทีม "Code Warriors" ต้องการเข้าร่วมโปรเจค AI Innovation',time:'2 นาทีที่แล้ว',isRead:false,icon:'👥'},
+          {id:2,type:'message',title:'ข้อความใหม่',message:'คุณมีข้อความใหม่จาก John Smith เกี่ยวกับโปรเจค',time:'15 นาทีที่แล้ว',isRead:false,icon:'💬'},
+          {id:3,type:'event',title:'อีเวนต์ใหม่เปิดรับสมัคร',message:'Blockchain Hackathon 2025 เปิดรับสมัครแล้ว!',time:'1 ชั่วโมงที่แล้ว',isRead:true,icon:'🎯'},
+          {id:4,type:'achievement',title:'คุณได้รับรางวัล!',message:'ยินดีด้วย! คุณได้รับ Badge "Team Player"',time:'3 ชั่วโมงที่แล้ว',isRead:true,icon:'🏆'}
+        ];
+        let notificationsHTML = '';
+        mockNotifications.forEach(notification => {
+          notificationsHTML += `
+            <div class="notification-item ${!notification.isRead ? 'unread' : ''}" 
+                 onclick="markAsRead(${notification.id})">
+              <div class="notification-icon">${notification.icon}</div>
+              <div class="notification-content">
+                <div class="notification-title">${notification.title}</div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-time">${notification.time}</div>
+              </div>
+              ${!notification.isRead ? '<div class="notification-badge"></div>' : ''}
+            </div>
+          `;
+        });
+        notificationList.innerHTML = notificationsHTML;
+        const unreadCount = mockNotifications.filter(n => !n.isRead).length;
+        updateNotificationCount(unreadCount);
+      }, 800);
+    }
+
+    function showNotifications() {
+      const modal = document.getElementById('notificationModal');
+      modal.style.display = 'block';
+      loadNotifications();
+      modal.onclick = function(event) {
+        if (event.target === modal) {
+          closeNotificationModal();
         }
-
-        body {
-            font-family: 'Kanit', sans-serif;
-            background: white;
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
+      }
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeNotificationModal();
         }
+      });
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+    function closeNotificationModal() {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+
+    function markAsRead(notificationId) {
+      console.log(`Marked notification ${notificationId} as read`);
+      const notificationElement = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+      if (notificationElement) {
+        notificationElement.classList.remove('unread');
+        const badge = notificationElement.querySelector('.notification-badge');
+        if (badge) badge.remove();
+      }
+      const currentCount = parseInt(document.querySelector('.notification-count').textContent) || 0;
+      if (currentCount > 0) {
+        updateNotificationCount(currentCount - 1);
+      }
+    }
+
+    function updateNotificationCount(count) {
+      const countElement = document.querySelector('.notification-count');
+      if (countElement) {
+        if (count > 0) {
+          countElement.textContent = count > 99 ? '99+' : count;
+          countElement.style.display = 'flex';
+        } else {
+          countElement.style.display = 'none';
         }
+      }
+    }
 
-        .profile-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            animation: slideUp 0.8s ease-out;
-        }
+    function updateHeader() {
+      const actionsDiv = document.getElementById('headerActions');
+      const isLoggedIn = checkLoginStatus();
+      if (isLoggedIn) {
+        actionsDiv.innerHTML = `
+          <div class="user-menu">
+            <button class="notification-btn" onclick="showNotifications()">
+              <span class="notification-icon">🔔</span>
+              <span class="notification-count">3</span>
+            </button>
+            <div class="hamburger" onclick="toggleMenu()">
+              <div></div><div></div><div></div>
+            </div>
+            <div id="dropdownMenu" class="dropdown-menu">
+              <button onclick="goToHome()">หน้าแรก</button>
+              <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+            </div>
+          </div>
+        `;
+      } else {
+        actionsDiv.innerHTML = `
+          <a href="login.html"><button>Login</button></a>
+          <a href="register.html"><button>Register</button></a>
+        `;
+      }
+    }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('show');
+    }
 
-        .profile-header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            position: relative;
-            overflow: hidden;
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+      updateHeader();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('logged') === 'true') {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateHeader();
+      }
+    });
 
-        .profile-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="60" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
-            animation: float 20s infinite linear;
-        }
+    // ปิดเมนูถ้าคลิกนอก
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const hamburger = document.querySelector('.hamburger');
+      if (menu && hamburger && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('show');
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageUpload = document.getElementById('imageUpload');
+        const profileImg = document.getElementById('profile-img');
 
-        @keyframes float {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .profile-image {
-            position: relative;
-            flex-shrink: 0;
-            z-index: 1;
-            cursor: pointer;
-        }
-
-        .profile-image img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            object-fit: cover;
-        }
-
-        .profile-image:hover img {
-            transform: scale(1.05);
-            filter: brightness(0.8);
-        }
-
-        .image-upload-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            cursor: pointer;
-        }
-
-        .profile-image:hover .image-upload-overlay {
-            opacity: 1;
-        }
-
-        .image-upload-overlay i {
-            font-size: 1.5rem;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        .image-upload-overlay span {
-            font-size: 0.8rem;
-            color: white;
-            font-weight: 500;
-        }
-
-        .profile-info {
-            z-index: 1;
-        }
-
-        .name {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .title {
-            font-size: 1.3rem;
-            font-weight: 400;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-
-        .bio {
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.8;
-            max-width: 500px;
-        }
-
-        .section {
-            padding: 40px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title i {
-            color: #4f46e5;
-            font-size: 1.3rem;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-radius: 12px;
-            border-left: 4px solid #4f46e5;
-            transition: all 0.3s ease;
-        }
-
-        .contact-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border-left-color: #7c3aed;
-        }
-
-        .contact-item i {
-            font-size: 1.2rem;
-            color: #4f46e5;
-            width: 20px;
-            text-align: center;
-        }
-
-        .contact-item .label {
-            font-weight: 500;
-            color: #64748b;
-            display: block;
-            font-size: 0.9rem;
-        }
-
-        .contact-item .value {
-            font-weight: 400;
-            color: #1e293b;
-            display: block;
-        }
-
-        .skills-category {
-            margin-bottom: 35px;
-        }
-
-        .skills-category h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .skill-item {
-            display: grid;
-            grid-template-columns: 150px 1fr auto;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .skill-name {
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .skill-level {
-            font-weight: 600;
-            color: #4f46e5;
-            font-size: 0.9rem;
-            min-width: 40px;
-            text-align: right;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .tag {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .tag:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .info-item i {
-            font-size: 1.1rem;
-            color: #4f46e5;
-            width: 20px;
-            text-align: center;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #374151;
-            min-width: 120px;
-        }
-
-        .info-value {
-            color: #64748b;
-            flex: 1;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-
-            .name {
-                font-size: 2rem;
-            }
-
-            .section {
-                padding: 30px 20px;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .profile-card {
-                border-radius: 15px;
-            }
-
-            .profile-header {
-                padding: 30px 20px;
-            }
-
-            .section {
-                padding: 20px 15px;
-            }
-        }
-    </style>
-
-    <script>
-        // Add image upload functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageUpload = document.getElementById('imageUpload');
-            const profileImg = document.getElementById('profile-img');
-
-            imageUpload.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    // Check if file is an image
-                    if (!file.type.startsWith('image/')) {
-                        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-                        return;
-                    }
-
-                    // Check file size (max 5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
-                        return;
-                    }
-
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        profileImg.src = e.target.result;
-                        
-                        // Add a smooth transition effect
-                        profileImg.style.opacity = '0';
-                        setTimeout(() => {
-                            profileImg.style.transition = 'opacity 0.3s ease';
-                            profileImg.style.opacity = '1';
-                        }, 100);
-                    };
-                    reader.readAsDataURL(file);
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if file is an image
+                if (!file.type.startsWith('image/')) {
+                    alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                    return;
                 }
-            });
 
-            // Add click effect to contact items
-            const contactItems = document.querySelectorAll('.contact-item');
-            contactItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImg.src = e.target.result;
+                    
+                    // Add a smooth transition effect
+                    profileImg.style.opacity = '0';
                     setTimeout(() => {
-                        this.style.transform = 'translateY(-3px)';
-                    }, 150);
-                });
-            });
+                        profileImg.style.transition = 'opacity 0.3s ease';
+                        profileImg.style.opacity = '1';
+                    }, 100);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-            // Add drag and drop functionality
-            const profileImage = document.querySelector('.profile-image');
-            
-            profileImage.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.transform = 'scale(1.05)';
-                this.style.filter = 'brightness(0.8)';
-            });
-
-            profileImage.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.style.transform = 'scale(1)';
-                this.style.filter = 'brightness(1)';
-            });
-
-            profileImage.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.transform = 'scale(1)';
-                this.style.filter = 'brightness(1)';
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    const file = files[0];
-                    if (file.type.startsWith('image/')) {
-                        if (file.size <= 5 * 1024 * 1024) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                profileImg.src = e.target.result;
-                                profileImg.style.opacity = '0';
-                                setTimeout(() => {
-                                    profileImg.style.transition = 'opacity 0.3s ease';
-                                    profileImg.style.opacity = '1';
-                                }, 100);
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
-                        }
-                    } else {
-                        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-                    }
-                }
+        // Add click effect to contact items
+        const contactItems = document.querySelectorAll('.contact-item');
+        contactItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-3px)';
+                }, 150);
             });
         });
-    </script>
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageUpload = document.getElementById('imageUpload');
+        const profileImg = document.getElementById('profile-img');
+
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if file is an image
+                if (!file.type.startsWith('image/')) {
+                    alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                    return;
+                }
+
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImg.src = e.target.result;
+                    
+                    // Add a smooth transition effect
+                    profileImg.style.opacity = '0';
+                    setTimeout(() => {
+                        profileImg.style.transition = 'opacity 0.3s ease';
+                        profileImg.style.opacity = '1';
+                    }, 100);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add click effect to contact items
+        const contactItems = document.querySelectorAll('.contact-item');
+        contactItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-3px)';
+                }, 150);
+            });
+        });
+
+        // Add drag and drop functionality
+        const profileImage = document.querySelector('.profile-image');
+        
+        profileImage.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1.05)';
+            this.style.filter = 'brightness(0.8)';
+        });
+
+        profileImage.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1)';
+            this.style.filter = 'brightness(1)';
+        });
+
+        profileImage.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(1)';
+            this.style.filter = 'brightness(1)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    if (file.size <= 5 * 1024 * 1024) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            profileImg.src = e.target.result;
+                            profileImg.style.opacity = '0';
+                            setTimeout(() => {
+                                profileImg.style.transition = 'opacity 0.3s ease';
+                                profileImg.style.opacity = '1';
+                            }, 100);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('ไฟล์รูปภาพมีขนาดใหญ่เกินไป (สูงสุด 5MB)');
+                    }
+                } else {
+                    alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+                }
+            }
+        });
+    });
+  </script>
 </body>
 </html>

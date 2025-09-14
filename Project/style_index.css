@@ -270,7 +270,7 @@ body {
 .main-section {
   background: white;
   padding: 30px 50px;
-  min-height: 100vh; /* ทำให้พื้นหลังขาวยาวเต็มหน้าจอ */
+  min-height: 90vh; /* ทำให้พื้นหลังขาวยาวเต็มหน้าจอ */
 }
 
 /* ---------------- PRODUCT GRID ---------------- */

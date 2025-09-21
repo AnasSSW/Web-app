@@ -273,6 +273,20 @@ body {
   min-height: 90vh; /* ทำให้พื้นหลังขาวยาวเต็มหน้าจอ */
 }
 
+.card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card button {
+  position: relative;
+  z-index: 10;
+}
 /* ---------------- PRODUCT GRID ---------------- */
 .container {
   display: grid;

@@ -46,25 +46,25 @@
   <!-- ส่วนล่าง (พื้นหลังขาว) -->
   <div class="main-section">
     <div class="container">
-      <div class="card">
+      <div class="card" onclick="goToDetailWork(1)">
         <img src="https://southeastasia.hss.de/fileadmin/user_upload/Projects_HSS/South_East_Asia/pictures/events/2021/Thailand/211204-01-Event-Virtual-Hackathon.jpg" alt="product1">
         <h3>งานที่ 1</h3>
-        <button>Join team</button>
+        <button onclick="event.stopPropagation(); joinTeam(1)">Join team</button>
       </div>
-      <div class="card">
+      <div class="card" onclick="goToDetailWork(2)">
         <img src="https://www.spu.ac.th/fac/informatics/wp-content/uploads/sites/10/2023/12/SPU-AI-Prompt-Mini-Hackathon-07-1-scaled.jpg" alt="product2">
         <h3>งานที่ 2</h3>
-        <button>Join team</button>
+        <button onclick="event.stopPropagation(); joinTeam(2)">Join team</button>
       </div>
-      <div class="card">
+      <div class="card" onclick="goToDetailWork(3)">
         <img src="https://th.bing.com/th/id/R.ae5a6a64b605c1231975af957fc31f70?rik=b%2bucy0JKkjmT1A&riu=http%3a%2f%2fstatic1.squarespace.com%2fstatic%2f5cd8cf71b2cf79a5a237fb49%2f5d145deceba7710001cdc1b4%2f624e8fc0a3318b6caef6a1cd%2f1649315883420%2fThematic%2bInnovation%2b2565.jpeg%3fformat%3d1500w&ehk=DqtAKTnQdJI4%2fxGKFXVyQ3q6Zdy6U6JkfuDLbdHdZ5c%3d&risl=&pid=ImgRaw&r=0" alt="product3">
         <h3>งานที่ 3</h3>
-        <button>Join team</button>
+        <button onclick="event.stopPropagation(); joinTeam(3)">Join team</button>
       </div>
-      <div class="card">
+      <div class="card" onclick="goToDetailWork(4)">
         <img src="https://carlifeway.com/wp-content/uploads/2023/05/Welcome-Home-New-Innovation-San-Parang-PTT-Group-Young-Socialpreneur-Hackathon-3.jpg" alt="product4">
         <h3>งานที่ 4</h3>
-        <button>Join team</button>
+        <button onclick="event.stopPropagation(); joinTeam(4)">Join team</button>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@
       </div>
     </div>
   </footer>
-
+  
   <script>
     // ตรวจสอบสถานะ login
     function checkLoginStatus() {
@@ -97,6 +97,30 @@
 
     function goToProfile() {
       window.location.href = 'profile.html';
+    }
+
+    // ฟังก์ชันสำหรับไปหน้า detail work
+    function goToDetailWork(workId) {
+      window.location.href = `detail_work.html?id=${workId}`;
+    }
+
+    // ฟังก์ชันสำหรับ Join team (แยกจากการคลิก card)
+    function joinTeam(workId) {
+      const isLoggedIn = checkLoginStatus();
+      
+      if (!isLoggedIn) {
+        if (confirm('กรุณาเข้าสู่ระบบก่อนเข้าร่วมทีม ต้องการไปหน้า Login หรือไม่?')) {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+      
+      // ถ้า login แล้วให้แสดงข้อความยืนยัน
+      if (confirm(`ต้องการเข้าร่วมทีมงานที่ ${workId} หรือไม่?`)) {
+        console.log(`เข้าร่วมทีมงานที่ ${workId}`);
+        alert('เข้าร่วมทีมเรียบร้อยแล้ว!');
+        // เพิ่มโค้ดสำหรับเข้าร่วมทีมที่นี่
+      }
     }
 
     function loadNotifications() {
@@ -208,6 +232,41 @@
       menu.classList.toggle('show');
     }
 
+    // ฟังก์ชันสำหรับสร้างโพสต์
+    function showCreatePostModal() {
+      const isLoggedIn = checkLoginStatus();
+      
+      if (!isLoggedIn) {
+        if (confirm('กรุณาเข้าสู่ระบบก่อนสร้างโพสต์ ต้องการไปหน้า Login หรือไม่?')) {
+          window.location.href = 'login.html';
+        }
+        return;
+      }
+      
+      const modal = document.getElementById('createPostModal');
+      modal.style.display = 'block';
+      
+      // ปิด modal เมื่อคลิกข้างนอก
+      modal.onclick = function(event) {
+        if (event.target === modal) {
+          closeCreatePostModal();
+        }
+      }
+      
+      // ปิด modal เมื่อกด ESC
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeCreatePostModal();
+        }
+      });
+    }
+
+    function closeCreatePostModal() {
+      document.getElementById('createPostModal').style.display = 'none';
+      document.getElementById('createPostForm').reset();
+    }
+
+    // จัดการการส่งฟอร์ม
     document.addEventListener('DOMContentLoaded', function() {
       updateHeader();
       const urlParams = new URLSearchParams(window.location.search);
@@ -215,6 +274,35 @@
         sessionStorage.setItem('isLoggedIn', 'true');
         window.history.replaceState({}, document.title, window.location.pathname);
         updateHeader();
+      }
+      
+      // เพิ่ม event listener สำหรับฟอร์ม
+      const createPostForm = document.getElementById('createPostForm');
+      if (createPostForm) {
+        createPostForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = {
+            title: document.getElementById('postTitle').value,
+            description: document.getElementById('postDescription').value,
+            teamSize: document.getElementById('teamSize').value,
+            duration: document.getElementById('duration').value,
+            skills: document.getElementById('skills').value,
+            contact: document.getElementById('contact').value,
+            image: document.getElementById('postImage').value
+          };
+          
+          console.log('สร้างโพสต์ใหม่:', formData);
+          
+          // แสดงข้อความยืนยัน
+          alert('สร้างโพสต์เรียบร้อยแล้ว!');
+          
+          // ปิด modal และรีเซ็ตฟอร์ม
+          closeCreatePostModal();
+          
+          // เพิ่มโค้ดสำหรับบันทึกข้อมูลโพสต์ที่นี่
+          // เช่น ส่งข้อมูลไป API หรือเก็บใน localStorage
+        });
       }
     });
 
